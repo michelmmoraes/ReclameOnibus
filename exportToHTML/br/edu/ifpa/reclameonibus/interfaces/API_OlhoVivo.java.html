@@ -1,0 +1,406 @@
+<html>
+<head>
+<title>API_OlhoVivo.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(0,0,255); }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+API_OlhoVivo.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<a name="l1"><span class="ln">1    </span></a><span class="s0">package </span><span class="s1">br.edu.ifpa.reclameonibus.interfaces; 
+<a name="l2"><span class="ln">2    </span></a> 
+<a name="l3"><span class="ln">3    </span></a></span><span class="s0">import </span><span class="s1">android.app.NotificationManager; 
+<a name="l4"><span class="ln">4    </span></a></span><span class="s0">import </span><span class="s1">android.app.PendingIntent; 
+<a name="l5"><span class="ln">5    </span></a></span><span class="s0">import </span><span class="s1">android.content.Context; 
+<a name="l6"><span class="ln">6    </span></a></span><span class="s0">import </span><span class="s1">android.content.Intent; 
+<a name="l7"><span class="ln">7    </span></a></span><span class="s0">import </span><span class="s1">android.os.AsyncTask; 
+<a name="l8"><span class="ln">8    </span></a></span><span class="s0">import </span><span class="s1">android.support.v4.app.NotificationCompat; 
+<a name="l9"><span class="ln">9    </span></a></span><span class="s0">import </span><span class="s1">android.support.v4.app.TaskStackBuilder; 
+<a name="l10"><span class="ln">10   </span></a></span><span class="s0">import </span><span class="s1">android.util.Log; 
+<a name="l11"><span class="ln">11   </span></a></span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+<a name="l12"><span class="ln">12   </span></a> 
+<a name="l13"><span class="ln">13   </span></a></span><span class="s0">import </span><span class="s1">org.apache.http.HttpEntity; 
+<a name="l14"><span class="ln">14   </span></a></span><span class="s0">import </span><span class="s1">org.apache.http.HttpResponse; 
+<a name="l15"><span class="ln">15   </span></a></span><span class="s0">import </span><span class="s1">org.apache.http.client.HttpClient; 
+<a name="l16"><span class="ln">16   </span></a></span><span class="s0">import </span><span class="s1">org.apache.http.client.methods.HttpGet; 
+<a name="l17"><span class="ln">17   </span></a></span><span class="s0">import </span><span class="s1">org.apache.http.client.methods.HttpPost; 
+<a name="l18"><span class="ln">18   </span></a></span><span class="s0">import </span><span class="s1">org.apache.http.impl.client.DefaultHttpClient; 
+<a name="l19"><span class="ln">19   </span></a></span><span class="s0">import </span><span class="s1">org.apache.http.util.EntityUtils; 
+<a name="l20"><span class="ln">20   </span></a></span><span class="s0">import </span><span class="s1">org.json.JSONArray; 
+<a name="l21"><span class="ln">21   </span></a></span><span class="s0">import </span><span class="s1">org.json.JSONException; 
+<a name="l22"><span class="ln">22   </span></a></span><span class="s0">import </span><span class="s1">org.json.JSONObject; 
+<a name="l23"><span class="ln">23   </span></a> 
+<a name="l24"><span class="ln">24   </span></a></span><span class="s0">import </span><span class="s1">java.io.IOException; 
+<a name="l25"><span class="ln">25   </span></a></span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+<a name="l26"><span class="ln">26   </span></a></span><span class="s0">import </span><span class="s1">java.util.List; 
+<a name="l27"><span class="ln">27   </span></a> 
+<a name="l28"><span class="ln">28   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclamenibus.R; 
+<a name="l29"><span class="ln">29   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.auxiliares.DadosBrutosCenario; 
+<a name="l30"><span class="ln">30   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.auxiliares.RespostaCenario; 
+<a name="l31"><span class="ln">31   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.auxiliares.RespostaOnibus; 
+<a name="l32"><span class="ln">32   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.auxiliares.RespostaParada; 
+<a name="l33"><span class="ln">33   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.cidadao.Cidadao; 
+<a name="l34"><span class="ln">34   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.componentes.Linha; 
+<a name="l35"><span class="ln">35   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.componentes.Onibus; 
+<a name="l36"><span class="ln">36   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.componentes.Parada; 
+<a name="l37"><span class="ln">37   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.localizacao.Localizacao; 
+<a name="l38"><span class="ln">38   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.telas.onibus.TelaOnibus;
+<a name="l39"><span class="ln">39   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.telas.outro.TelaOutro;
+<a name="l40"><span class="ln">40   </span></a></span><span class="s0">import </span><span class="s1">br.edu.ifpa.reclameonibus.telas.parada.TelaParada;
+<a name="l41"><span class="ln">41   </span></a> 
+<a name="l42"><span class="ln">42   </span></a></span><span class="s0">public class </span><span class="s1">API_OlhoVivo </span><span class="s0">extends </span><span class="s1">AsyncTask { 
+<a name="l43"><span class="ln">43   </span></a>    </span><span class="s0">public static final int </span><span class="s1">DETECTAR_CENARIO = </span><span class="s2">1</span><span class="s1">, DETECTAR_PARADA = </span><span class="s2">2</span><span class="s1">, 
+<a name="l44"><span class="ln">44   </span></a>            DETECTAR_ONIBUS = </span><span class="s2">3</span><span class="s1">, LOCALIZACAO_GPS_OK = </span><span class="s2">88</span><span class="s1">, API_SPTRANS_OK = </span><span class="s2">99</span><span class="s1">, 
+<a name="l45"><span class="ln">45   </span></a>            CONSULTAR_TODAS_LINHAS = </span><span class="s2">78</span><span class="s1">; 
+<a name="l46"><span class="ln">46   </span></a>    HttpClient httpClient; 
+<a name="l47"><span class="ln">47   </span></a>    </span><span class="s0">boolean </span><span class="s1">appAutenticado = </span><span class="s0">false</span><span class="s1">; 
+<a name="l48"><span class="ln">48   </span></a>    Context con; 
+<a name="l49"><span class="ln">49   </span></a>    NotificationManager mNotificationManager; 
+<a name="l50"><span class="ln">50   </span></a>    NotificationCompat.Builder mBuilder; 
+<a name="l51"><span class="ln">51   </span></a> 
+<a name="l52"><span class="ln">52   </span></a>    </span><span class="s0">public </span><span class="s1">API_OlhoVivo(Context c, NotificationManager nm, NotificationCompat.Builder mb) { 
+<a name="l53"><span class="ln">53   </span></a>        httpClient = </span><span class="s0">new </span><span class="s1">DefaultHttpClient(); 
+<a name="l54"><span class="ln">54   </span></a>        con = c; 
+<a name="l55"><span class="ln">55   </span></a>    } 
+<a name="l56"><span class="ln">56   </span></a> 
+<a name="l57"><span class="ln">57   </span></a>    </span><span class="s0">public void </span><span class="s1">notificar(</span><span class="s0">int </span><span class="s1">idNotificacao, String titulo, String texto, String ticker, 
+<a name="l58"><span class="ln">58   </span></a>                          Class classe) { 
+<a name="l59"><span class="ln">59   </span></a>        mBuilder.setContentTitle(titulo).setContentText(texto).setTicker(ticker); 
+<a name="l60"><span class="ln">60   </span></a>        Intent resultIntent = </span><span class="s0">new </span><span class="s1">Intent(con, classe); 
+<a name="l61"><span class="ln">61   </span></a>        TaskStackBuilder stackBuilder = TaskStackBuilder.create(con); 
+<a name="l62"><span class="ln">62   </span></a>        stackBuilder.addParentStack(classe); 
+<a name="l63"><span class="ln">63   </span></a>        stackBuilder.addNextIntent(resultIntent); 
+<a name="l64"><span class="ln">64   </span></a>        PendingIntent resultPendingIntent = 
+<a name="l65"><span class="ln">65   </span></a>                stackBuilder.getPendingIntent(</span><span class="s2">0</span><span class="s1">, PendingIntent.FLAG_UPDATE_CURRENT); 
+<a name="l66"><span class="ln">66   </span></a>        mBuilder.setContentIntent(resultPendingIntent); 
+<a name="l67"><span class="ln">67   </span></a>        mNotificationManager.notify(idNotificacao, mBuilder.build()); 
+<a name="l68"><span class="ln">68   </span></a>    } 
+<a name="l69"><span class="ln">69   </span></a> 
+<a name="l70"><span class="ln">70   </span></a>    @Override 
+<a name="l71"><span class="ln">71   </span></a>    </span><span class="s0">protected void </span><span class="s1">onPreExecute() { 
+<a name="l72"><span class="ln">72   </span></a>        </span><span class="s0">super</span><span class="s1">.onPreExecute(); 
+<a name="l73"><span class="ln">73   </span></a>        mBuilder = </span><span class="s0">new </span><span class="s1">NotificationCompat.Builder(con) 
+<a name="l74"><span class="ln">74   </span></a>                .setSmallIcon(R.drawable.onibusamarelo) 
+<a name="l75"><span class="ln">75   </span></a>                .setContentTitle(</span><span class="s3">&quot;My notification&quot;</span><span class="s1">) 
+<a name="l76"><span class="ln">76   </span></a>                .setContentText(</span><span class="s3">&quot;Hello World!&quot;</span><span class="s1">).setTicker(</span><span class="s3">&quot;ticker&quot;</span><span class="s1">); 
+<a name="l77"><span class="ln">77   </span></a>        mNotificationManager = 
+<a name="l78"><span class="ln">78   </span></a>                (NotificationManager) con.getSystemService(Context.NOTIFICATION_SERVICE); 
+<a name="l79"><span class="ln">79   </span></a>    } 
+<a name="l80"><span class="ln">80   </span></a> 
+<a name="l81"><span class="ln">81   </span></a>    @Override 
+<a name="l82"><span class="ln">82   </span></a>    </span><span class="s0">protected </span><span class="s1">Object doInBackground(Object[] objects) { 
+<a name="l83"><span class="ln">83   </span></a>        </span><span class="s4">//objects {codigoAcao, cidadao}</span><span class="s1"> 
+<a name="l84"><span class="ln">84   </span></a>        notificar(</span><span class="s2">111111</span><span class="s1">, </span><span class="s3">&quot;doinbackground&quot;</span><span class="s1">, 
+<a name="l85"><span class="ln">85   </span></a>                </span><span class="s3">&quot;testando notificação dentro do doinbackground do asynctask. Testar abrir TelaOutro&quot;</span><span class="s1">, </span><span class="s3">&quot;lol...&quot;</span><span class="s1">, 
+<a name="l86"><span class="ln">86   </span></a>                TelaOutro.</span><span class="s0">class</span><span class="s1">); 
+<a name="l87"><span class="ln">87   </span></a>        RespostaCenario respostaCenario = </span><span class="s0">new </span><span class="s1">RespostaCenario(); 
+<a name="l88"><span class="ln">88   </span></a>        respostaCenario.setIdCenario(RespostaCenario.OUTRO); 
+<a name="l89"><span class="ln">89   </span></a>        </span><span class="s0">int </span><span class="s1">codigoAcao = (</span><span class="s0">int</span><span class="s1">) objects[</span><span class="s2">0</span><span class="s1">]; 
+<a name="l90"><span class="ln">90   </span></a>        Cidadao cidadao = (Cidadao) objects[</span><span class="s2">1</span><span class="s1">]; 
+<a name="l91"><span class="ln">91   </span></a>        </span><span class="s0">if </span><span class="s1">(codigoAcao == API_OlhoVivo.DETECTAR_CENARIO) { 
+<a name="l92"><span class="ln">92   </span></a>            </span><span class="s0">if </span><span class="s1">(!appAutenticado) { 
+<a name="l93"><span class="ln">93   </span></a>                appAutenticado = autenticarSe(); 
+<a name="l94"><span class="ln">94   </span></a>                </span><span class="s0">if </span><span class="s1">(appAutenticado) { 
+<a name="l95"><span class="ln">95   </span></a>                    notificar(</span><span class="s2">1111111</span><span class="s1">, </span><span class="s3">&quot;app autenticado&quot;</span><span class="s1">, </span><span class="s3">&quot;você autenticou-se. Testar abrir TelaOnibus&quot;</span><span class="s1">, 
+<a name="l96"><span class="ln">96   </span></a>                            </span><span class="s3">&quot;token=true&quot;</span><span class="s1">, TelaOnibus.</span><span class="s0">class</span><span class="s1">); 
+<a name="l97"><span class="ln">97   </span></a>                    </span><span class="s4">//publishProgress(&quot;Você autenticou-se!&quot;);</span><span class="s1"> 
+<a name="l98"><span class="ln">98   </span></a>                } </span><span class="s0">else </span><span class="s1">{ 
+<a name="l99"><span class="ln">99   </span></a>                    publishProgress(</span><span class="s3">&quot;Houve um problema na sua autenticação!&quot;</span><span class="s1">); 
+<a name="l100"><span class="ln">100  </span></a>                } 
+<a name="l101"><span class="ln">101  </span></a>            } </span><span class="s0">else </span><span class="s1">{ 
+<a name="l102"><span class="ln">102  </span></a>                publishProgress(</span><span class="s3">&quot;Você já está autenticado!&quot;</span><span class="s1">); 
+<a name="l103"><span class="ln">103  </span></a>            } 
+<a name="l104"><span class="ln">104  </span></a>            </span><span class="s0">return </span><span class="s1">detectarCenarioAntigo(cidadao); 
+<a name="l105"><span class="ln">105  </span></a>        } </span><span class="s0">else if </span><span class="s1">(codigoAcao == CONSULTAR_TODAS_LINHAS) { 
+<a name="l106"><span class="ln">106  </span></a>             
+<a name="l107"><span class="ln">107  </span></a>        } 
+<a name="l108"><span class="ln">108  </span></a>        </span><span class="s0">return null</span><span class="s1">; 
+<a name="l109"><span class="ln">109  </span></a>    } 
+<a name="l110"><span class="ln">110  </span></a> 
+<a name="l111"><span class="ln">111  </span></a>    @Override 
+<a name="l112"><span class="ln">112  </span></a>    </span><span class="s0">protected void </span><span class="s1">onProgressUpdate(Object[] values) { 
+<a name="l113"><span class="ln">113  </span></a>        </span><span class="s0">super</span><span class="s1">.onProgressUpdate(values); 
+<a name="l114"><span class="ln">114  </span></a>        Toast.makeText(con, values[</span><span class="s2">0</span><span class="s1">].toString(), Toast.LENGTH_SHORT).show(); 
+<a name="l115"><span class="ln">115  </span></a>    } 
+<a name="l116"><span class="ln">116  </span></a> 
+<a name="l117"><span class="ln">117  </span></a>    </span><span class="s0">private boolean </span><span class="s1">autenticarSe() { 
+<a name="l118"><span class="ln">118  </span></a>        HttpPost httpPost = </span><span class="s0">new </span><span class="s1">HttpPost(</span><span class="s3">&quot;http://api.olhovivo.sptrans.com.br/v0/&quot; </span><span class="s1">+ 
+<a name="l119"><span class="ln">119  </span></a>                </span><span class="s3">&quot;Login/Autenticar?token=&quot; </span><span class="s1">+ 
+<a name="l120"><span class="ln">120  </span></a>                </span><span class="s3">&quot;79ff26567c7db5b8b7be53a1d0f7fa1f64572140dbb9a66e9945b2ba81c7b75d&quot;</span><span class="s1">); 
+<a name="l121"><span class="ln">121  </span></a>        </span><span class="s0">try </span><span class="s1">{ 
+<a name="l122"><span class="ln">122  </span></a>            HttpResponse httpResponse = httpClient.execute(httpPost); 
+<a name="l123"><span class="ln">123  </span></a>            HttpEntity httpEntity = httpResponse.getEntity(); 
+<a name="l124"><span class="ln">124  </span></a>            </span><span class="s0">boolean </span><span class="s1">autenticou = Boolean.parseBoolean(EntityUtils.toString(httpEntity)); 
+<a name="l125"><span class="ln">125  </span></a>            appAutenticado = autenticou; 
+<a name="l126"><span class="ln">126  </span></a>            </span><span class="s0">return </span><span class="s1">autenticou; 
+<a name="l127"><span class="ln">127  </span></a>        } </span><span class="s0">catch </span><span class="s1">(IOException e) { 
+<a name="l128"><span class="ln">128  </span></a>            e.printStackTrace(); 
+<a name="l129"><span class="ln">129  </span></a>        } 
+<a name="l130"><span class="ln">130  </span></a>        </span><span class="s0">return false</span><span class="s1">; 
+<a name="l131"><span class="ln">131  </span></a>    } 
+<a name="l132"><span class="ln">132  </span></a> 
+<a name="l133"><span class="ln">133  </span></a>    </span><span class="s0">private </span><span class="s1">DadosBrutosCenario detectarCenario(Cidadao cidadao) { 
+<a name="l134"><span class="ln">134  </span></a>        DadosBrutosCenario dadosBrutosCenario = </span><span class="s0">new </span><span class="s1">DadosBrutosCenario(); 
+<a name="l135"><span class="ln">135  </span></a>        dadosBrutosCenario.setArrayTodasParadas(detectarParada(cidadao)); 
+<a name="l136"><span class="ln">136  </span></a>        dadosBrutosCenario.setPosicoesOnibus(detectarOnibus(cidadao)); 
+<a name="l137"><span class="ln">137  </span></a>        </span><span class="s0">return </span><span class="s1">dadosBrutosCenario; 
+<a name="l138"><span class="ln">138  </span></a>    } 
+<a name="l139"><span class="ln">139  </span></a> 
+<a name="l140"><span class="ln">140  </span></a>    </span><span class="s0">private </span><span class="s1">JSONArray detectarParada(Cidadao cidadao) { 
+<a name="l141"><span class="ln">141  </span></a>        HttpGet httpGet = </span><span class="s0">new </span><span class="s1">HttpGet(</span><span class="s3">&quot;http://api.olhovivo.sptrans.com.br/v0&quot; </span><span class="s1">+ 
+<a name="l142"><span class="ln">142  </span></a>                </span><span class="s3">&quot;/Parada/Buscar?termosBusca=&quot;</span><span class="s1">); 
+<a name="l143"><span class="ln">143  </span></a>        JSONArray jsonArray = </span><span class="s0">new </span><span class="s1">JSONArray(); 
+<a name="l144"><span class="ln">144  </span></a>        </span><span class="s0">try </span><span class="s1">{ 
+<a name="l145"><span class="ln">145  </span></a>            HttpResponse httpResponse = httpClient.execute(httpGet); 
+<a name="l146"><span class="ln">146  </span></a>            HttpEntity httpEntity = httpResponse.getEntity(); 
+<a name="l147"><span class="ln">147  </span></a>            jsonArray = </span><span class="s0">new </span><span class="s1">JSONArray(EntityUtils.toString(httpEntity)); 
+<a name="l148"><span class="ln">148  </span></a>            </span><span class="s0">return </span><span class="s1">jsonArray; 
+<a name="l149"><span class="ln">149  </span></a>        } </span><span class="s0">catch </span><span class="s1">(IOException | JSONException e) { 
+<a name="l150"><span class="ln">150  </span></a>            e.printStackTrace(); 
+<a name="l151"><span class="ln">151  </span></a>        } 
+<a name="l152"><span class="ln">152  </span></a>        </span><span class="s0">return </span><span class="s1">jsonArray; 
+<a name="l153"><span class="ln">153  </span></a>    } 
+<a name="l154"><span class="ln">154  </span></a> 
+<a name="l155"><span class="ln">155  </span></a>    </span><span class="s0">private </span><span class="s1">JSONArray detectarOnibus(Cidadao cidadao) { 
+<a name="l156"><span class="ln">156  </span></a>        List&lt;Linha&gt; listaTodasLinhas = buscarTodasLinhasAntigo(); 
+<a name="l157"><span class="ln">157  </span></a>        JSONArray todosOnibus = </span><span class="s0">new </span><span class="s1">JSONArray(); 
+<a name="l158"><span class="ln">158  </span></a>        </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s1">; i &lt; listaTodasLinhas.size(); i++) { 
+<a name="l159"><span class="ln">159  </span></a>            HttpGet httpGet = </span><span class="s0">new </span><span class="s1">HttpGet(</span><span class="s3">&quot;http://api.olhovivo.sptrans.com.br/v0&quot; </span><span class="s1">+ 
+<a name="l160"><span class="ln">160  </span></a>                    </span><span class="s3">&quot;/Posicao?codigoLinha=&quot; </span><span class="s1">+ listaTodasLinhas.get(i).getCodigoLinha()); 
+<a name="l161"><span class="ln">161  </span></a>            </span><span class="s0">try </span><span class="s1">{ 
+<a name="l162"><span class="ln">162  </span></a>                HttpResponse httpResponse = httpClient.execute(httpGet); 
+<a name="l163"><span class="ln">163  </span></a>                HttpEntity httpEntity = httpResponse.getEntity(); 
+<a name="l164"><span class="ln">164  </span></a>                String respostaJSON = EntityUtils.toString(httpEntity); 
+<a name="l165"><span class="ln">165  </span></a>                JSONObject jsonObject = </span><span class="s0">new </span><span class="s1">JSONObject(respostaJSON); 
+<a name="l166"><span class="ln">166  </span></a>                JSONArray jsonArray = jsonObject.getJSONArray(</span><span class="s3">&quot;vs&quot;</span><span class="s1">); 
+<a name="l167"><span class="ln">167  </span></a>                todosOnibus.put(jsonArray); 
+<a name="l168"><span class="ln">168  </span></a>            } </span><span class="s0">catch </span><span class="s1">(JSONException | IOException e) { 
+<a name="l169"><span class="ln">169  </span></a>                publishProgress(</span><span class="s3">&quot;ERRO! &quot; </span><span class="s1">+ e.getMessage()); 
+<a name="l170"><span class="ln">170  </span></a>                e.printStackTrace(); 
+<a name="l171"><span class="ln">171  </span></a>            } 
+<a name="l172"><span class="ln">172  </span></a>        } 
+<a name="l173"><span class="ln">173  </span></a>        </span><span class="s0">return </span><span class="s1">todosOnibus; 
+<a name="l174"><span class="ln">174  </span></a>    } 
+<a name="l175"><span class="ln">175  </span></a> 
+<a name="l176"><span class="ln">176  </span></a>    </span><span class="s0">private </span><span class="s1">JSONArray buscarTodasLinhas() { 
+<a name="l177"><span class="ln">177  </span></a>        JSONArray arrayTodasLinhas = </span><span class="s0">new </span><span class="s1">JSONArray(); 
+<a name="l178"><span class="ln">178  </span></a>        </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s1">; i &lt; </span><span class="s2">10</span><span class="s1">; i++) { 
+<a name="l179"><span class="ln">179  </span></a>            HttpGet httpGet = </span><span class="s0">new </span><span class="s1">HttpGet(</span><span class="s3">&quot;http://api.olhovivo.sptrans.com.br/v0&quot; </span><span class="s1">+ 
+<a name="l180"><span class="ln">180  </span></a>                    </span><span class="s3">&quot;/Linha/Buscar?termosBusca=&quot; </span><span class="s1">+ i); 
+<a name="l181"><span class="ln">181  </span></a>            </span><span class="s0">try </span><span class="s1">{ 
+<a name="l182"><span class="ln">182  </span></a>                HttpResponse httpResponse = httpClient.execute(httpGet); 
+<a name="l183"><span class="ln">183  </span></a>                HttpEntity httpEntity = httpResponse.getEntity(); 
+<a name="l184"><span class="ln">184  </span></a>                String respostaJSON = EntityUtils.toString(httpEntity); 
+<a name="l185"><span class="ln">185  </span></a>                JSONArray jsonArray = </span><span class="s0">new </span><span class="s1">JSONArray(respostaJSON); 
+<a name="l186"><span class="ln">186  </span></a>                arrayTodasLinhas.put(jsonArray); 
+<a name="l187"><span class="ln">187  </span></a>            } </span><span class="s0">catch </span><span class="s1">(IOException | JSONException e) { 
+<a name="l188"><span class="ln">188  </span></a>                publishProgress(</span><span class="s3">&quot;ERRO AO BUSCAR LINHAS!</span><span class="s0">\n</span><span class="s3">&quot; </span><span class="s1">+ e.getMessage()); 
+<a name="l189"><span class="ln">189  </span></a>                e.printStackTrace(); 
+<a name="l190"><span class="ln">190  </span></a>            } 
+<a name="l191"><span class="ln">191  </span></a>        } 
+<a name="l192"><span class="ln">192  </span></a>        </span><span class="s0">return </span><span class="s1">arrayTodasLinhas; 
+<a name="l193"><span class="ln">193  </span></a>    } 
+<a name="l194"><span class="ln">194  </span></a> 
+<a name="l195"><span class="ln">195  </span></a>    </span><span class="s0">private </span><span class="s1">RespostaCenario detectarCenarioAntigo(Cidadao cidadao) { 
+<a name="l196"><span class="ln">196  </span></a>        RespostaCenario respostaCenario = </span><span class="s0">new </span><span class="s1">RespostaCenario(); 
+<a name="l197"><span class="ln">197  </span></a>        </span><span class="s4">//publishProgress(&quot;buscando paradas...&quot;);</span><span class="s1"> 
+<a name="l198"><span class="ln">198  </span></a>        RespostaParada respostaParada = detectarParadaAntigo(cidadao); 
+<a name="l199"><span class="ln">199  </span></a>        </span><span class="s4">//publishProgress(&quot;paradas ok&quot;);</span><span class="s1"> 
+<a name="l200"><span class="ln">200  </span></a>        </span><span class="s0">if </span><span class="s1">(respostaParada.isEstaNaParada()) { 
+<a name="l201"><span class="ln">201  </span></a>            </span><span class="s4">// O usuário está em uma parada</span><span class="s1"> 
+<a name="l202"><span class="ln">202  </span></a>            respostaCenario.setIdCenario(RespostaCenario.PARADA); 
+<a name="l203"><span class="ln">203  </span></a>            respostaCenario.setParada(respostaParada.getParada()); 
+<a name="l204"><span class="ln">204  </span></a>            </span><span class="s0">return </span><span class="s1">respostaCenario; 
+<a name="l205"><span class="ln">205  </span></a>        } </span><span class="s0">else </span><span class="s1">{ 
+<a name="l206"><span class="ln">206  </span></a>            notificar(</span><span class="s2">11111111</span><span class="s1">, </span><span class="s3">&quot;Parada=false&quot;</span><span class="s1">, 
+<a name="l207"><span class="ln">207  </span></a>                    </span><span class="s3">&quot;Você não está em uma parada! Testar abrir TelaParada&quot;</span><span class="s1">, </span><span class="s3">&quot;parada :(&quot;</span><span class="s1">, TelaParada.</span><span class="s0">class</span><span class="s1">); 
+<a name="l208"><span class="ln">208  </span></a>            </span><span class="s4">//publishProgress(&quot;buscando ônibus...&quot;);</span><span class="s1"> 
+<a name="l209"><span class="ln">209  </span></a>            RespostaOnibus respostaOnibus = detectarOnibusAntigo(cidadao); 
+<a name="l210"><span class="ln">210  </span></a>            </span><span class="s4">//publishProgress(&quot;ônibus ok&quot;);</span><span class="s1"> 
+<a name="l211"><span class="ln">211  </span></a>            </span><span class="s0">if </span><span class="s1">(respostaOnibus.isEstaNoOnibus()) { 
+<a name="l212"><span class="ln">212  </span></a>                </span><span class="s4">// O usuário está em um ônibus</span><span class="s1"> 
+<a name="l213"><span class="ln">213  </span></a>                respostaCenario.setIdCenario(RespostaCenario.ONIBUS); 
+<a name="l214"><span class="ln">214  </span></a>                respostaCenario.setOnibus(respostaOnibus.getOnibus()); 
+<a name="l215"><span class="ln">215  </span></a>                </span><span class="s0">return </span><span class="s1">respostaCenario; 
+<a name="l216"><span class="ln">216  </span></a>            } </span><span class="s0">else </span><span class="s1">{ 
+<a name="l217"><span class="ln">217  </span></a>                </span><span class="s4">// O usuário está em qualquer outro lugar</span><span class="s1"> 
+<a name="l218"><span class="ln">218  </span></a>                respostaCenario.setIdCenario(RespostaCenario.OUTRO); 
+<a name="l219"><span class="ln">219  </span></a>                </span><span class="s0">return </span><span class="s1">respostaCenario; 
+<a name="l220"><span class="ln">220  </span></a>            } 
+<a name="l221"><span class="ln">221  </span></a>        } 
+<a name="l222"><span class="ln">222  </span></a>    } 
+<a name="l223"><span class="ln">223  </span></a> 
+<a name="l224"><span class="ln">224  </span></a>    </span><span class="s0">private </span><span class="s1">RespostaParada detectarParadaAntigo(Cidadao cidadao) { 
+<a name="l225"><span class="ln">225  </span></a>        HttpGet httpGet = </span><span class="s0">new </span><span class="s1">HttpGet(</span><span class="s3">&quot;http://api.olhovivo.sptrans.com.br/v0&quot; </span><span class="s1">+ 
+<a name="l226"><span class="ln">226  </span></a>                </span><span class="s3">&quot;/Parada/Buscar?termosBusca=&quot;</span><span class="s1">); 
+<a name="l227"><span class="ln">227  </span></a>        Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;detectando todas as paradas...&quot;</span><span class="s1">); 
+<a name="l228"><span class="ln">228  </span></a>        </span><span class="s0">try </span><span class="s1">{ 
+<a name="l229"><span class="ln">229  </span></a>            HttpResponse httpResponse = httpClient.execute(httpGet); 
+<a name="l230"><span class="ln">230  </span></a>            Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;HttpResponse httpResponse = httpClient.execute(httpGet);&quot;</span><span class="s1">); 
+<a name="l231"><span class="ln">231  </span></a>            HttpEntity httpEntity = httpResponse.getEntity(); 
+<a name="l232"><span class="ln">232  </span></a>            Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;HttpEntity httpEntity = httpResponse.getEntity();&quot;</span><span class="s1">); 
+<a name="l233"><span class="ln">233  </span></a>            JSONArray jsonArray = </span><span class="s0">new </span><span class="s1">JSONArray(EntityUtils.toString(httpEntity)); 
+<a name="l234"><span class="ln">234  </span></a>            Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;JSONArray jsonArray = new JSONArray(EntityUtils.toString(httpEntity));&quot;</span><span class="s1">); 
+<a name="l235"><span class="ln">235  </span></a>            </span><span class="s4">//publishProgress(&quot;qtd paradas=&quot; + jsonArray.length());</span><span class="s1"> 
+<a name="l236"><span class="ln">236  </span></a>            Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;foram encontradas &quot; </span><span class="s1">+ jsonArray.length() + </span><span class="s3">&quot; paradas.&quot;</span><span class="s1">); 
+<a name="l237"><span class="ln">237  </span></a>            </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s1">; i &lt; jsonArray.length(); i++) { 
+<a name="l238"><span class="ln">238  </span></a>                Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;parada encontrada nº&quot; </span><span class="s1">+ i); 
+<a name="l239"><span class="ln">239  </span></a>                </span><span class="s0">if </span><span class="s1">(cidadao.getLocalizacao().getLatitude() == 
+<a name="l240"><span class="ln">240  </span></a>                        jsonArray.getJSONObject(i).getDouble(</span><span class="s3">&quot;Latitude&quot;</span><span class="s1">)) { 
+<a name="l241"><span class="ln">241  </span></a>                    </span><span class="s0">if </span><span class="s1">(cidadao.getLocalizacao().getLongitude() == 
+<a name="l242"><span class="ln">242  </span></a>                            jsonArray.getJSONObject(i).getDouble(</span><span class="s3">&quot;Longitude&quot;</span><span class="s1">)) { 
+<a name="l243"><span class="ln">243  </span></a>                        </span><span class="s4">// O cidadão está em uma parada</span><span class="s1"> 
+<a name="l244"><span class="ln">244  </span></a>                        RespostaParada respostaParada = </span><span class="s0">new </span><span class="s1">RespostaParada(); 
+<a name="l245"><span class="ln">245  </span></a>                        respostaParada.setEstaNaParada(</span><span class="s0">true</span><span class="s1">); 
+<a name="l246"><span class="ln">246  </span></a>                        Parada parada = </span><span class="s0">new </span><span class="s1">Parada(); 
+<a name="l247"><span class="ln">247  </span></a>                        parada.setCodigoParada(jsonArray.getJSONObject(i).getInt(</span><span class="s3">&quot;CodigoParada&quot;</span><span class="s1">)); 
+<a name="l248"><span class="ln">248  </span></a>                        parada.setNome(jsonArray.getJSONObject(i).getString(</span><span class="s3">&quot;Nome&quot;</span><span class="s1">)); 
+<a name="l249"><span class="ln">249  </span></a>                        parada.setEndereco(jsonArray.getJSONObject(i).getString(</span><span class="s3">&quot;Endereco&quot;</span><span class="s1">)); 
+<a name="l250"><span class="ln">250  </span></a>                        Localizacao localizacao = </span><span class="s0">new </span><span class="s1">Localizacao(); 
+<a name="l251"><span class="ln">251  </span></a>                        localizacao.setLatitude(jsonArray.getJSONObject(i).getDouble(</span><span class="s3">&quot;Latitude&quot;</span><span class="s1">)); 
+<a name="l252"><span class="ln">252  </span></a>                        localizacao.setLongitude(jsonArray.getJSONObject(i).getDouble(</span><span class="s3">&quot;Longitude&quot;</span><span class="s1">)); 
+<a name="l253"><span class="ln">253  </span></a>                        parada.setLocalizacao(localizacao); 
+<a name="l254"><span class="ln">254  </span></a>                        respostaParada.setParada(parada); 
+<a name="l255"><span class="ln">255  </span></a>                        Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;parada encontrada!ok!&quot;</span><span class="s1">); 
+<a name="l256"><span class="ln">256  </span></a>                        </span><span class="s0">return </span><span class="s1">respostaParada; 
+<a name="l257"><span class="ln">257  </span></a>                    } 
+<a name="l258"><span class="ln">258  </span></a>                } 
+<a name="l259"><span class="ln">259  </span></a>            } 
+<a name="l260"><span class="ln">260  </span></a>        } </span><span class="s0">catch </span><span class="s1">(Exception e) { 
+<a name="l261"><span class="ln">261  </span></a>            Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;ERRO: &quot; </span><span class="s1">+ e.getMessage()); 
+<a name="l262"><span class="ln">262  </span></a>            e.printStackTrace(); 
+<a name="l263"><span class="ln">263  </span></a>        } 
+<a name="l264"><span class="ln">264  </span></a>        RespostaParada respostaParada = </span><span class="s0">new </span><span class="s1">RespostaParada(); 
+<a name="l265"><span class="ln">265  </span></a>        respostaParada.setEstaNaParada(</span><span class="s0">false</span><span class="s1">); 
+<a name="l266"><span class="ln">266  </span></a>        Log.e(</span><span class="s3">&quot;parada&quot;</span><span class="s1">, </span><span class="s3">&quot;busca de paradas foi concluída.&quot;</span><span class="s1">); 
+<a name="l267"><span class="ln">267  </span></a>        </span><span class="s0">return </span><span class="s1">respostaParada; 
+<a name="l268"><span class="ln">268  </span></a>    } 
+<a name="l269"><span class="ln">269  </span></a> 
+<a name="l270"><span class="ln">270  </span></a>    </span><span class="s0">private </span><span class="s1">RespostaOnibus detectarOnibusAntigo(Cidadao cidadao) { 
+<a name="l271"><span class="ln">271  </span></a>        </span><span class="s0">int </span><span class="s1">totalOnibus = </span><span class="s2">0</span><span class="s1">; 
+<a name="l272"><span class="ln">272  </span></a>        </span><span class="s4">//publishProgress(&quot;Buscando todas as linhas...&quot;);</span><span class="s1"> 
+<a name="l273"><span class="ln">273  </span></a>        List&lt;Linha&gt; listaTodasLinhas = buscarTodasLinhasAntigo(); 
+<a name="l274"><span class="ln">274  </span></a>        </span><span class="s0">int </span><span class="s1">totalLinhas = listaTodasLinhas.size(); 
+<a name="l275"><span class="ln">275  </span></a>        Log.e(</span><span class="s3">&quot;onibus_vermelho&quot;</span><span class="s1">, </span><span class="s3">&quot;total de linhas encontradas=&quot; </span><span class="s1">+ totalLinhas); 
+<a name="l276"><span class="ln">276  </span></a>        </span><span class="s0">int </span><span class="s1">grupoLinhasPorVez = </span><span class="s2">50</span><span class="s1">; 
+<a name="l277"><span class="ln">277  </span></a>        </span><span class="s0">int </span><span class="s1">linhasRestantes = totalLinhas; 
+<a name="l278"><span class="ln">278  </span></a>        </span><span class="s0">int </span><span class="s1">iniciarEm = </span><span class="s2">0</span><span class="s1">; 
+<a name="l279"><span class="ln">279  </span></a>        </span><span class="s0">int </span><span class="s1">terminarEm = grupoLinhasPorVez; 
+<a name="l280"><span class="ln">280  </span></a>        </span><span class="s4">//publishProgress(&quot;total de linhas/100 = &quot; + totalLinhas / grupoLinhasPorVez + &quot;\ntotal de linhas%100 = &quot; + totalLinhas % grupoLinhasPorVez);</span><span class="s1"> 
+<a name="l281"><span class="ln">281  </span></a>        </span><span class="s4">//publishProgress(&quot;iniciando método GIGANTE detectar ônibus...&quot;);</span><span class="s1"> 
+<a name="l282"><span class="ln">282  </span></a>        </span><span class="s4">//while (linhasRestantes &gt; 0) {</span><span class="s1"> 
+<a name="l283"><span class="ln">283  </span></a>        Log.e(</span><span class="s3">&quot;onibus_vermelho&quot;</span><span class="s1">, </span><span class="s3">&quot;linhasRestantes para verificar=&quot; </span><span class="s1">+ linhasRestantes); 
+<a name="l284"><span class="ln">284  </span></a>        </span><span class="s4">//for (int i = iniciarEm; i &lt; terminarEm; i++) {</span><span class="s1"> 
+<a name="l285"><span class="ln">285  </span></a>        </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s1">; i &lt; totalLinhas; i++) { 
+<a name="l286"><span class="ln">286  </span></a>            Log.e(</span><span class="s3">&quot;onibus_vermelho&quot;</span><span class="s1">, </span><span class="s3">&quot;verificando ônibus das linhas de &quot; </span><span class="s1">+ iniciarEm + </span><span class="s3">&quot; até &quot; </span><span class="s1">+ terminarEm); 
+<a name="l287"><span class="ln">287  </span></a>            HttpGet httpGet = </span><span class="s0">new </span><span class="s1">HttpGet(</span><span class="s3">&quot;http://api.olhovivo.sptrans.com.br/v0&quot; </span><span class="s1">+ 
+<a name="l288"><span class="ln">288  </span></a>                    </span><span class="s3">&quot;/Posicao?codigoLinha=&quot; </span><span class="s1">+ listaTodasLinhas.get(i).getCodigoLinha()); 
+<a name="l289"><span class="ln">289  </span></a>            </span><span class="s0">try </span><span class="s1">{ 
+<a name="l290"><span class="ln">290  </span></a>                HttpResponse httpResponse = httpClient.execute(httpGet); 
+<a name="l291"><span class="ln">291  </span></a>                HttpEntity httpEntity = httpResponse.getEntity(); 
+<a name="l292"><span class="ln">292  </span></a>                String respostaJSON = EntityUtils.toString(httpEntity); 
+<a name="l293"><span class="ln">293  </span></a>                JSONObject jsonObject = </span><span class="s0">new </span><span class="s1">JSONObject(respostaJSON); 
+<a name="l294"><span class="ln">294  </span></a>                JSONArray jsonArray = jsonObject.getJSONArray(</span><span class="s3">&quot;vs&quot;</span><span class="s1">); 
+<a name="l295"><span class="ln">295  </span></a>                Log.e(</span><span class="s3">&quot;onibus_vermelho&quot;</span><span class="s1">, </span><span class="s3">&quot;linha nº &quot; </span><span class="s1">+ i + </span><span class="s3">&quot; tem &quot; </span><span class="s1">+ jsonArray.length() + </span><span class="s3">&quot; ônibus circulando.&quot;</span><span class="s1">); 
+<a name="l296"><span class="ln">296  </span></a>                totalOnibus += jsonArray.length(); 
+<a name="l297"><span class="ln">297  </span></a>                </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s2">0</span><span class="s1">; j &lt; jsonArray.length(); j++) { 
+<a name="l298"><span class="ln">298  </span></a>                    Log.e(</span><span class="s3">&quot;onibus_vermelho&quot;</span><span class="s1">, </span><span class="s3">&quot;verificando ônibus &quot; </span><span class="s1">+ j + </span><span class="s3">&quot; da linha &quot; </span><span class="s1">+ i); 
+<a name="l299"><span class="ln">299  </span></a>                    </span><span class="s0">if </span><span class="s1">(cidadao.getLocalizacao().getLatitude() == 
+<a name="l300"><span class="ln">300  </span></a>                            jsonArray.getJSONObject(j).getDouble(</span><span class="s3">&quot;px&quot;</span><span class="s1">)) { 
+<a name="l301"><span class="ln">301  </span></a>                        </span><span class="s0">if </span><span class="s1">(cidadao.getLocalizacao().getLongitude() == 
+<a name="l302"><span class="ln">302  </span></a>                                jsonArray.getJSONObject(j).getDouble(</span><span class="s3">&quot;py&quot;</span><span class="s1">)) { 
+<a name="l303"><span class="ln">303  </span></a>                            </span><span class="s4">// O cidadão está em uma ônibus</span><span class="s1"> 
+<a name="l304"><span class="ln">304  </span></a>                            RespostaOnibus respostaOnibus = </span><span class="s0">new </span><span class="s1">RespostaOnibus(); 
+<a name="l305"><span class="ln">305  </span></a>                            respostaOnibus.setEstaNoOnibus(</span><span class="s0">true</span><span class="s1">); 
+<a name="l306"><span class="ln">306  </span></a>                            Onibus onibus = </span><span class="s0">new </span><span class="s1">Onibus(); 
+<a name="l307"><span class="ln">307  </span></a>                            onibus.setIdOnibus(Integer.parseInt(jsonArray.getJSONObject(j).getString(</span><span class="s3">&quot;p&quot;</span><span class="s1">))); 
+<a name="l308"><span class="ln">308  </span></a>                            onibus.setReferencia(</span><span class="s3">&quot;vazio por enquanto!&quot;</span><span class="s1">); 
+<a name="l309"><span class="ln">309  </span></a>                            Localizacao localizacao = </span><span class="s0">new </span><span class="s1">Localizacao(); 
+<a name="l310"><span class="ln">310  </span></a>                            localizacao.setLatitude(jsonArray.getJSONObject(j).getDouble(</span><span class="s3">&quot;px&quot;</span><span class="s1">)); 
+<a name="l311"><span class="ln">311  </span></a>                            localizacao.setLongitude(jsonArray.getJSONObject(j).getDouble(</span><span class="s3">&quot;py&quot;</span><span class="s1">)); 
+<a name="l312"><span class="ln">312  </span></a>                            onibus.setLocalizacao(localizacao); 
+<a name="l313"><span class="ln">313  </span></a>                            respostaOnibus.setOnibus(onibus); 
+<a name="l314"><span class="ln">314  </span></a>                            </span><span class="s0">return </span><span class="s1">respostaOnibus; 
+<a name="l315"><span class="ln">315  </span></a>                        } 
+<a name="l316"><span class="ln">316  </span></a>                    } 
+<a name="l317"><span class="ln">317  </span></a>                } 
+<a name="l318"><span class="ln">318  </span></a>            } </span><span class="s0">catch </span><span class="s1">(JSONException | IOException e) { 
+<a name="l319"><span class="ln">319  </span></a>                publishProgress(</span><span class="s3">&quot;ERRO! &quot; </span><span class="s1">+ e.getMessage()); 
+<a name="l320"><span class="ln">320  </span></a>                e.printStackTrace(); 
+<a name="l321"><span class="ln">321  </span></a>            } 
+<a name="l322"><span class="ln">322  </span></a>            notificar(</span><span class="s2">222222</span><span class="s1">, </span><span class="s3">&quot;Progresso busca por ônibus:&quot;</span><span class="s1">, 
+<a name="l323"><span class="ln">323  </span></a>                    (</span><span class="s0">int</span><span class="s1">) (((</span><span class="s0">double</span><span class="s1">) terminarEm / (</span><span class="s0">double</span><span class="s1">) totalLinhas) * </span><span class="s2">100</span><span class="s1">) + </span><span class="s3">&quot; %&quot;</span><span class="s1">, </span><span class="s3">&quot;...&quot;</span><span class="s1">, 
+<a name="l324"><span class="ln">324  </span></a>                    TelaOnibus.</span><span class="s0">class</span><span class="s1">); 
+<a name="l325"><span class="ln">325  </span></a>            Log.e(</span><span class="s3">&quot;onibus_vermelho&quot;</span><span class="s1">, </span><span class="s3">&quot;andamento=&quot; </span><span class="s1">+ ((</span><span class="s0">double</span><span class="s1">) terminarEm / (</span><span class="s0">double</span><span class="s1">) totalLinhas) * </span><span class="s2">100.00 </span><span class="s1">+ </span><span class="s3">&quot; %&quot;</span><span class="s1">); 
+<a name="l326"><span class="ln">326  </span></a>        } 
+<a name="l327"><span class="ln">327  </span></a>           </span><span class="s4">/* linhasRestantes = linhasRestantes - grupoLinhasPorVez; 
+<a name="l328"><span class="ln">328  </span></a>            Log.e(&quot;onibus_vermelho&quot;, &quot;linhasRestantes (após o for do grupo)=&quot; + linhasRestantes); 
+<a name="l329"><span class="ln">329  </span></a>            if (linhasRestantes &lt; grupoLinhasPorVez) { 
+<a name="l330"><span class="ln">330  </span></a>                terminarEm += linhasRestantes; 
+<a name="l331"><span class="ln">331  </span></a>            } else { 
+<a name="l332"><span class="ln">332  </span></a>                terminarEm += grupoLinhasPorVez; 
+<a name="l333"><span class="ln">333  </span></a>            } 
+<a name="l334"><span class="ln">334  </span></a>            iniciarEm += grupoLinhasPorVez; 
+<a name="l335"><span class="ln">335  </span></a>            Log.e(&quot;onibus_vermelho&quot;, &quot;iniciar em=&quot; + iniciarEm + &quot; terminar em &quot; + terminarEm); 
+<a name="l336"><span class="ln">336  </span></a>        }*/</span><span class="s1"> 
+<a name="l337"><span class="ln">337  </span></a>        Log.e(</span><span class="s3">&quot;onibus_vermelho&quot;</span><span class="s1">, </span><span class="s3">&quot;total de ônibus=&quot; </span><span class="s1">+ totalOnibus); 
+<a name="l338"><span class="ln">338  </span></a>        RespostaOnibus respostaOnibus = </span><span class="s0">new </span><span class="s1">RespostaOnibus(); 
+<a name="l339"><span class="ln">339  </span></a>        respostaOnibus.setEstaNoOnibus(</span><span class="s0">false</span><span class="s1">); 
+<a name="l340"><span class="ln">340  </span></a>        Log.e(</span><span class="s3">&quot;onibus_vermelho&quot;</span><span class="s1">, </span><span class="s3">&quot;Método encerrado&quot;</span><span class="s1">); 
+<a name="l341"><span class="ln">341  </span></a>        </span><span class="s0">return </span><span class="s1">respostaOnibus; 
+<a name="l342"><span class="ln">342  </span></a>    } 
+<a name="l343"><span class="ln">343  </span></a> 
+<a name="l344"><span class="ln">344  </span></a>    </span><span class="s0">private </span><span class="s1">List&lt;Linha&gt; buscarTodasLinhasAntigo() { 
+<a name="l345"><span class="ln">345  </span></a>        List&lt;Linha&gt; listaLinhas = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;(); 
+<a name="l346"><span class="ln">346  </span></a>        JSONArray arrayTodasLinhas = </span><span class="s0">new </span><span class="s1">JSONArray(); 
+<a name="l347"><span class="ln">347  </span></a>        Log.e(</span><span class="s3">&quot;linha&quot;</span><span class="s1">, </span><span class="s3">&quot;buscando linhas...&quot;</span><span class="s1">); 
+<a name="l348"><span class="ln">348  </span></a>        </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s1">; i &lt; </span><span class="s2">10</span><span class="s1">; i++) { 
+<a name="l349"><span class="ln">349  </span></a>            HttpGet httpGet = </span><span class="s0">new </span><span class="s1">HttpGet(</span><span class="s3">&quot;http://api.olhovivo.sptrans.com.br/v0&quot; </span><span class="s1">+ 
+<a name="l350"><span class="ln">350  </span></a>                    </span><span class="s3">&quot;/Linha/Buscar?termosBusca=&quot; </span><span class="s1">+ i); 
+<a name="l351"><span class="ln">351  </span></a>            Log.e(</span><span class="s3">&quot;linha&quot;</span><span class="s1">, </span><span class="s3">&quot;buscando linhas... letreiros começando em &quot; </span><span class="s1">+ i); 
+<a name="l352"><span class="ln">352  </span></a>            </span><span class="s0">try </span><span class="s1">{ 
+<a name="l353"><span class="ln">353  </span></a>                HttpResponse httpResponse = httpClient.execute(httpGet); 
+<a name="l354"><span class="ln">354  </span></a>                HttpEntity httpEntity = httpResponse.getEntity(); 
+<a name="l355"><span class="ln">355  </span></a>                String respostaJSON = EntityUtils.toString(httpEntity); 
+<a name="l356"><span class="ln">356  </span></a>                JSONArray jsonArray = </span><span class="s0">new </span><span class="s1">JSONArray(respostaJSON); 
+<a name="l357"><span class="ln">357  </span></a>                arrayTodasLinhas.put(jsonArray); 
+<a name="l358"><span class="ln">358  </span></a>                Log.e(</span><span class="s3">&quot;linha&quot;</span><span class="s1">, </span><span class="s3">&quot;letreiros começando em &quot; </span><span class="s1">+ i + </span><span class="s3">&quot; têm &quot; </span><span class="s1">+ jsonArray.length() + </span><span class="s3">&quot; linhas.&quot;</span><span class="s1">); 
+<a name="l359"><span class="ln">359  </span></a>                </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s2">0</span><span class="s1">; j &lt; jsonArray.length(); j++) { 
+<a name="l360"><span class="ln">360  </span></a>                    JSONObject linhaDaVez = jsonArray.getJSONObject(j); 
+<a name="l361"><span class="ln">361  </span></a>                    Log.e(</span><span class="s3">&quot;linha&quot;</span><span class="s1">, </span><span class="s3">&quot;letreiro começa com &quot; </span><span class="s1">+ i + </span><span class="s3">&quot;, linha nº &quot; </span><span class="s1">+ j 
+<a name="l362"><span class="ln">362  </span></a>                            + </span><span class="s3">&quot;, codigoLinha=&quot; </span><span class="s1">+ linhaDaVez.getInt(</span><span class="s3">&quot;CodigoLinha&quot;</span><span class="s1">)); 
+<a name="l363"><span class="ln">363  </span></a>                    Linha linha = </span><span class="s0">new </span><span class="s1">Linha(); 
+<a name="l364"><span class="ln">364  </span></a>                    linha.setCodigoLinha(linhaDaVez.getInt(</span><span class="s3">&quot;CodigoLinha&quot;</span><span class="s1">)); 
+<a name="l365"><span class="ln">365  </span></a>                    linha.setCircular(linhaDaVez.getBoolean(</span><span class="s3">&quot;Circular&quot;</span><span class="s1">)); 
+<a name="l366"><span class="ln">366  </span></a>                    linha.setLetreiro(linhaDaVez.getString(</span><span class="s3">&quot;Letreiro&quot;</span><span class="s1">)); 
+<a name="l367"><span class="ln">367  </span></a>                    linha.setSentido(linhaDaVez.getString(</span><span class="s3">&quot;Sentido&quot;</span><span class="s1">)); 
+<a name="l368"><span class="ln">368  </span></a>                    linha.setTipo(linhaDaVez.getString(</span><span class="s3">&quot;Tipo&quot;</span><span class="s1">)); 
+<a name="l369"><span class="ln">369  </span></a>                    linha.setDenominacaoTPTS(linhaDaVez.getString(</span><span class="s3">&quot;DenominacaoTPTS&quot;</span><span class="s1">)); 
+<a name="l370"><span class="ln">370  </span></a>                    linha.setDenominacaoTSTP(linhaDaVez.getString(</span><span class="s3">&quot;DenominacaoTSTP&quot;</span><span class="s1">)); 
+<a name="l371"><span class="ln">371  </span></a>                    listaLinhas.add(linha); 
+<a name="l372"><span class="ln">372  </span></a>                } 
+<a name="l373"><span class="ln">373  </span></a>            } </span><span class="s0">catch </span><span class="s1">(IOException | JSONException e) { 
+<a name="l374"><span class="ln">374  </span></a>                publishProgress(</span><span class="s3">&quot;ERRO AO BUSCAR LINHAS!</span><span class="s0">\n</span><span class="s3">&quot; </span><span class="s1">+ e.getMessage()); 
+<a name="l375"><span class="ln">375  </span></a>                Log.e(</span><span class="s3">&quot;linha&quot;</span><span class="s1">, </span><span class="s3">&quot;buscando linhas... erro:&quot; </span><span class="s1">+ e.getMessage()); 
+<a name="l376"><span class="ln">376  </span></a>                e.printStackTrace(); 
+<a name="l377"><span class="ln">377  </span></a>            } 
+<a name="l378"><span class="ln">378  </span></a>        } 
+<a name="l379"><span class="ln">379  </span></a>        Log.e(</span><span class="s3">&quot;linha&quot;</span><span class="s1">, </span><span class="s3">&quot;foram encontradas &quot; </span><span class="s1">+ listaLinhas.size() + </span><span class="s3">&quot; linhas.&quot;</span><span class="s1">); 
+<a name="l380"><span class="ln">380  </span></a>        </span><span class="s0">return </span><span class="s1">listaLinhas; 
+<a name="l381"><span class="ln">381  </span></a>    } 
+<a name="l382"><span class="ln">382  </span></a>} 
+<a name="l383"><span class="ln">383  </span></a></span></pre>
+</body>
+</html>

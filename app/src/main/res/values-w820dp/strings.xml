@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="infoParadaInicial">Informação inicial sobre o ponto de parada</string>
+    <string name="infoDestinoParada">O destino, após selecionado</string>
+    <string name="infoLinhaSelecionada">informações sobre a linha de ônibus selecionada</string>
+    <string name="infoProxOnibus">Próximo ônibus</string>
+    <string name="infoBotaoQueimaParada">Queima de parada</string>
+    <string name="infoBotaoSelecionarLinha">Selecionar Linha</string>
+    <string name="infoBotaoTempoEspera">00:00</string>
+    <string name="infoBotaoCondicoesParada">Condições da parada</string>
+    <string name="textoInicial">textoInicial</string>
+    <string name="infoOnibus">Informação sobre o ônibus</string>
+    <string name="infoDestinoSelecionado">Informações sobre o destino selecionado</string>
+    <string name="infoBotaoSelecionarDestino">Selecionar destino</string>
+    <string name="infoProxParada">Próxima parada deste ônibus</string>
+    <string name="infoQueimaParadaNoOnibus">Queima de Parada</string>
+    <string name="infoBotaoSuperlotacao">Superlotação</string>
+    <string name="infoCondutaInadequada">Conduta inadequada</string>
+    <string name="infoDirecaoPerigosa">Direção perigosa</string>
+</resources>

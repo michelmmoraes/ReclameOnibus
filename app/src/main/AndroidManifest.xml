@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="br.edu.ifpa.reclamenibus">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.TelaPrincipal"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.parada.TelaParada"
+            android:label="@string/title_activity_tela_parada"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.onibus.TelaOnibus"
+            android:label="@string/title_activity_tela_onibus"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.outro.TelaOutro"
+            android:label="@string/title_activity_tela_outro"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="br.edu.ifpa.reclameonibus.servicos.MonitoraLocalizacao"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name="br.edu.ifpa.reclameonibus.servicos.MonitoraOnibus"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.parada.TelaTempoEspera"
+            android:label="@string/title_activity_tela_tempo_espera" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.parada.TelaQueimaParadaEmbarque"
+            android:label="@string/title_activity_tela_queima_parada_embarque" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.onibus.TelaDirecaoPerigosa"
+            android:label="@string/title_activity_tela_direcao_perigosa" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.onibus.TelaCondutaInadequada"
+            android:label="@string/title_activity_tela_conduta_inadequada" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.onibus.TelaQueimaParadaDesembarque"
+            android:label="@string/title_activity_tela_queima_parada_desembarque" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.parada.TelaSuperlotacaoVistaFora"
+            android:label="@string/title_activity_tela_superlotacao_vista_fora" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.onibus.TelaSuperlotacaoVistaDentro"
+            android:label="@string/title_activity_tela_superlotacao_vista_dentro" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.parada.TelaCondicoesParada"
+            android:label="@string/title_activity_tela_condicoes_parada" />
+        <activity
+            android:name="br.edu.ifpa.reclameonibus.telas.onibus.TelaCondicoesOnibus"
+            android:label="@string/title_activity_tela_condicoes_onibus"></activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigationModel
+  ns = "http://schemas.android.com?import=com.android.tools.idea.editors.navigation.model.*">
+  <locations  
+    class = "java.util.ArrayList">
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "br.edu.ifpa.reclameonibus.telas.parada.TelaParada"/>
+      <point      
+        x = "1784"      
+        y = "84"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "br.edu.ifpa.reclameonibus.telas.outro.TelaOutro"/>
+      <point      
+        x = "2608"      
+        y = "88"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "br.edu.ifpa.reclameonibus.telas.TelaPrincipal"/>
+      <point      
+        x = "92"      
+        y = "76"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "br.edu.ifpa.reclameonibus.telas.onibus.TelaOnibus"/>
+      <point      
+        x = "944"      
+        y = "80"/>
+    </statePointEntry>
+  </locations>
+</navigationModel>

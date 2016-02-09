@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Reclame Ônibus</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Configurações</string>
+    <string name="title_activity_tela_parada">Tela Parada</string>
+    <string name="title_activity_tela_onibus">Tela Ônibus</string>
+    <string name="title_activity_tela_outro">Tela Outro Lugar</string>
+
+    <string name="new_message_notification_title_template">New message: %1$s</string>
+
+    <!-- TODO: remove this placeholder text -->
+    <string name="new_message_notification_placeholder_text_template">You said %1$s and lorem ipsum
+        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
+        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
+        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
+        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
+        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
+        tortor.
+    </string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+    <string name="infoParadaInicial">Informação inicial sobre o ponto de parada</string>
+    <string name="infoLinhaSelecionada">Informações sobre a linha de ônibus selecionada</string>
+    <string name="infoProxOnibus">Próximo ônibus</string>
+    <string name="infoBotaoQueimaParada">Queima de parada</string>
+    <string name="infoBotaoSelecionarLinha">Selecionar Linha</string>
+    <string name="infoTempoEspera">Tempo de espera:</string>
+    <string name="infoBotaoTempoEspera">00:00</string>
+    <string name="infoBotaoCondicoesParada">Condições da parada</string>
+    <string name="textoInicial">Esta tela será fechada assim que sua localização GPS for encontrada.
+        Verifique as notificações para saber o andamento do aplicativo.</string>
+    <string name="infoOnibus">Informação sobre o ônibus</string>
+    <string name="infoDestinoSelecionado">Informações sobre o destino selecionado</string>
+    <string name="infoBotaoSelecionarDestino">Selecionar destino</string>
+    <string name="infoProxParada">Próxima parada deste ônibus</string>
+    <string name="infoQueimaParadaNoOnibus">Queima de Parada</string>
+    <string name="infoBotaoSuperlotacao">Superlotação</string>
+    <string name="infoCondutaInadequada">Conduta inadequada</string>
+    <string name="infoDirecaoPerigosa">Direção perigosa</string>
+    <string name="title_activity_tela_tempo_espera">Intervalo excessivo de espera</string>
+    <string name="title_activity_tela_queima_parada">Queima de parada</string>
+    <string name="title_activity_tela_superlotacao">Ônibus superlotado</string>
+    <string name="title_activity_tela_queima_parada_embarque">Queima de parada
+    </string>
+    <string name="title_activity_tela_direcao_perigosa">Direção perigosa</string>
+    <string name="title_activity_tela_conduta_inadequada">Conduta inadequada
+    </string>
+    <string name="title_activity_tela_queima_parada_desembarque">Queima de parada
+    </string>
+    <string name="title_activity_tela_superlotacao_vista_fora">Superlotação</string>
+    <string name="title_activity_tela_superlotacao_vista_dentro">Superlotação</string>
+    <string name="title_activity_tela_condicoes_parada">Condições da Parada de Ônibus</string>
+    <string name="title_activity_tela_condicoes_onibus">Condições do Ônibus</string>
+</resources>
